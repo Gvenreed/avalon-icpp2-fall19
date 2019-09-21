@@ -4,7 +4,8 @@ using namespace std;
 
 int main()
 {
-	long long int n, numb, sum, numb_2;
+	int n;
+	long long int numb, sum, numb_2;
 	cin >> n;
 	for (int i = 0; i < n; i++)
 	{
