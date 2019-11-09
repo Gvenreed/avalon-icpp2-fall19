@@ -64,18 +64,24 @@ namespace ext
 		}
 	}
 
-	enum DateFormat
+	enum class DateFormat
 	{
 		MonthAsInt,
 		MonthAsString
 	};
 
-	enum Season
+	enum class Season
 	{
 		Winter,
 		Spring,
 		Summer,
 		Autumn
+	};
+
+	enum class SortBy
+	{
+		Date,
+		Season
 	};
 
 	struct Date
@@ -140,56 +146,49 @@ namespace ext
 	*/
 	Season getSeason(Date date)
 	{
-		switch (date.month)
-		{
-		case Month::January:
-		case Month::February:
-		case Month::December:
-			return Season::Winter;
-			break;
-		case Month::March:
-		case Month::April:
-		case Month::May:
-			return Season::Spring;
-			break;
-		case Month::June:
-		case Month::July:
-		case Month::August:
-			return Season::Summer;
-			break;
-		case Month::October:
-		case Month::Novemver:
-		case Month::September:
-			return Season::Autumn;
-			break;
-		default:
-			break;
-		}
+			switch (date.month)
+			{
+			case Month::January:
+			case Month::February:
+			case Month::December:
+				return Season::Winter;
+				break;
+			case Month::March:
+			case Month::April:
+			case Month::May:
+				return Season::Spring;
+				break;
+			case Month::June:
+			case Month::July:
+			case Month::August:
+				return Season::Summer;
+				break;
+			case Month::October:
+			case Month::Novemver:
+			case Month::September:
+				return Season::Autumn;
+				break;
+			default:
+				break;
+			}
 	}
 	Season getSeason(Month month)
 	{
-		switch (static_cast<int>(month)) 
+		if ((static_cast<int>(month) == 12) || (static_cast<int>(month) == 1) || (static_cast<int>(month) == 2))
 		{
-		case 1:
-		case 2:
-		case 12:
 			return Season::Winter;
-			break;
-		case 3:
-		case 4:
-		case 5:
+		}
+		if ((static_cast<int>(month) > 2) & (static_cast<int>(month) < 6))
+		{
 			return Season::Spring;
-			break;
-		case 6:
-		case 7:
-		case 8:
+		}
+		if ((static_cast<int>(month) > 5) & (static_cast<int>(month) < 9))
+		{
 			return Season::Summer;
-			break;
-		case 9:
-		case 10:
-		case 11:
+		}
+		if ((static_cast<int>(month) > 8) & (static_cast<int>(month) < 12))
+		{
 			return Season::Autumn;
-			break;
 		}
 	}
 
@@ -198,81 +197,96 @@ namespace ext
 	*/
 	bool operator == (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day == rhs.day) && ((static_cast<int>(lhs.month)) == (static_cast<int>(rhs.month))) && (lhs.year == rhs.year)) 
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
+		return (lhs.day == rhs.day) && (lhs.month == rhs.month) && (lhs.year == rhs.year);
 	}
 	bool operator != (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day != rhs.day) && ((static_cast<int>(lhs.month)) != (static_cast<int>(rhs.month))) && (lhs.year != rhs.year))
-		{
-			return (lhs != rhs);
-		}
+		return !(lhs == rhs);
 	}
-
 	bool operator < (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day < rhs.day) && ((static_cast<int>(lhs.month)) < (static_cast<int>(rhs.month))) && (lhs.year < rhs.year))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ((lhs.day < rhs.day) && ((static_cast<int>(lhs.month)) < (static_cast<int>(rhs.month))) && (lhs.year < rhs.year));
 	}
-
 	bool operator <= (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day <= rhs.day) && ((static_cast<int>(lhs.month)) <= (static_cast<int>(rhs.month))) && (lhs.year <= rhs.year))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ((lhs.day <= rhs.day) && ((static_cast<int>(lhs.month)) <= (static_cast<int>(rhs.month))) && (lhs.year <= rhs.year));
 	}
 	bool operator > (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day > rhs.day) && ((static_cast<int>(lhs.month)) > (static_cast<int>(rhs.month))) && (lhs.year > rhs.year))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ((lhs.day > rhs.day) && ((static_cast<int>(lhs.month)) > (static_cast<int>(rhs.month))) && (lhs.year > rhs.year));
 	}
 	bool operator >= (const Date lhs, const Date rhs)
 	{
-		if ((lhs.day >= rhs.day) && ((static_cast<int>(lhs.month)) >= (static_cast<int>(rhs.month))) && (lhs.year >= rhs.year))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ((lhs.day >= rhs.day) && ((static_cast<int>(lhs.month)) >= (static_cast<int>(rhs.month))) && (lhs.year >= rhs.year));
 	}
 
 	/*
-		Написать перегрузку для следующих арифметических операторомв
+		Написать перегрузку для следующих арифметических операторов
 	*/
-	Date operator + (const Date date, const TimeDelta delta);
-	Date operator + (const TimeDelta delta, const Date date);
-	TimeDelta operator + (const TimeDelta lhs, const TimeDelta rhs);
-	Date operator - (const Date date, const TimeDelta delta);
-	Date operator - (const TimeDelta delta, const Date date);
-	TimeDelta operator - (const TimeDelta lhs, const TimeDelta rhs);
 
-	TimeDelta operator * (const TimeDelta delta, int multiplier);
-	TimeDelta operator * (int multiplier, const TimeDelta delta);
-	TimeDelta operator / (const TimeDelta delta, int multiplier);
-	TimeDelta operator / (int multiplier, const TimeDelta delta);
-}
+	Date JDNToDate(TimeDelta delta) {
+		Date output;
+		int a = delta.delta + 32044;
+		int b = ((4 * a) + 3) / 146097;
+		int c = a - ((146097 * b) / 4);
+		int d = ((4 * c) + 3) / 1461;
+		int e = c - ((1461 * d) / 4);
+		int m = ((5 * e) + 2) / 153;
+		output.day = e - ((153 * m + 2) / 5) + 1;
+		output.month = static_cast<Month>(m + 3 - 12 * (m / 10));
+		output.year = (100 * b) + d - 4800 + (m / 10);
+		return output;
+	}
+
+	Date operator + (const Date date, const TimeDelta delta) 
+	{
+		TimeDelta one = countJND(date);
+		return JDNToDate(one + delta);
+	}
+
+	Date operator + (const TimeDelta delta, const Date date) {
+		TimeDelta one = countJND(date);
+		return JDNToDate(one + delta);
+	}
+
+	TimeDelta operator + (const TimeDelta lhs, const TimeDelta rhs)
+	{
+		TimeDelta one;
+		one.delta = lhs.delta + rhs.delta;
+		return one;
+	}
+
+	Date operator - (const Date date, const TimeDelta delta)
+	{
+		TimeDelta one = countJND(date);
+		return JDNToDate(one - delta);
+	}
+	Date operator - (const TimeDelta delta, const Date date)
+	{
+		TimeDelta one = countJND(date);
+		return JDNToDate(one - delta);
+	}
+	TimeDelta operator - (const TimeDelta lhs, const TimeDelta rhs)
+	{
+		TimeDelta one;
+		one.delta = lhs.delta - rhs.delta;
+		return one;
+	}
+
+	TimeDelta operator * (const TimeDelta delta, int multiplier)
+	{
+		TimeDelta one;
+		one.delta = (delta.delta * multiplier);
+		return one;
+	}
+	TimeDelta operator * (int multiplier, const TimeDelta delta)
+	{
+		TimeDelta one;
+		one.delta = (multiplier * delta.delta);
+		return one;
+	}
+	TimeDelta operator / (const TimeDelta delta, int multiplier)
+	{
+		TimeDelta one;
+		one.delta = (delta.delta / multiplier);
+	}
