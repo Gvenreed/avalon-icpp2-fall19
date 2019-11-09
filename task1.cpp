@@ -80,4 +80,57 @@ int main()
 	{
 		cout << "ошибка ввода" << endl;
 	}
+	
+	//#2
+	
+	int Mark[100][5];
+		float Stud[100];
+		int sum = 0, mar = 0;
+		for (int i = 0; i < 100; i++) 
+		{
+			for (int j = 0; j < 5; j++) 
+			{
+				mar = GetRandomValue(2, 5);
+				Mark[i][j] = mar;
+				sum += mar;
+			}
+			Stud[i] = static_cast<float>(sum) / 5;
+			sum = 0;
+		}
+
+		for (int i = 0; i < 99; i++) 
+		{
+			int temp2 = 0;
+			for (int j = 0; j < 99; j++) 
+			{
+				if (Stud[j] > Stud[j + 1])
+				{
+					swap(Mark[j], Mark[j + 1]);
+					swap(Stud[j], Stud[j+ 1]);
+				}
+			}
+		}
+
+		for (int i = 0; i < 99; i++)
+		{
+			cout << Stud[i] << ";  ";
+		}
+
+		cout << "Чтобы быть лучше 25%: ";
+		for (int i = 0; i < 5; i++) 
+		{
+			cout << Mark[26][i] << "; ";
+		}
+		cout << endl;
+		cout << "Чтобы быть лучше 50%: ";
+		for (int i = 0; i < 5; i++) 
+		{
+			cout << Mark[51][i] << "; ";
+		}
+		cout << endl;
+		cout << "Чтобы быть лучше 75%: ";
+		for (int i = 0; i < 5; i++) {
+			cout << Mark[76][i] << "; ";
+		}
+		cout << endl;
 };
