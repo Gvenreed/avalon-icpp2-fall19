@@ -1,4 +1,8 @@
-#pragma once
+#include <iostream>
+#include "Date.hpp"
+
+using namespace std;
+using namespace ext;
 
 namespace ext
 {
