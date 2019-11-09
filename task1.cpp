@@ -120,4 +120,131 @@ int main()
 	s2 = numeric_limits<double>::max();
 	s3 = numeric_limits<double>::digits;
 	printf("%s%13s%14d%s%9d%8s%14d%4s%9d", str20, dq, s, dq, s1, dq, s2, dq, s3);
+	
+	//#2
+	
+	#include <iostream>
+#include "Extention.hpp"
+
+using namespace ext;
+using namespace std;
+
+int main()
+{
+	int YearNum[10][12];
+	int arr[10][12];
+	int Max[12];
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			YearNum[i][j] = GetRandomValue(1000, 100000);
+		}
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		int dq = GetRandomValue(0, 12);
+		int er = GetRandomValue(0, 10);
+		for (int j = dq; j < 12; j++)
+		{
+			YearNum[er][j] = -1;
+		}
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int k = 0; k < 11; k++)
+		{
+			for (int j = 0; j < 11; j++)
+			{
+				int temp;
+				if (YearNum[i][j] > YearNum[i][j + 1])
+				{
+					temp = YearNum[i][j];
+					YearNum[i][j] = YearNum[i][j + 1];
+					YearNum[i][j + 1] = temp;
+				}
+				temp = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 11; j++)
+		{
+			cout << YearNum[i][j] << " ";
+		}
+		cout << endl;
+	}
+	int x, y,z;
+	x = 0; 
+	y = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			if (YearNum[i][j] != -1)
+			{
+				arr[x][y] = YearNum[i][j];
+				y += 1;
+			}
+		}
+		y = 0;
+	x += 1;
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			if (arr[i][j] < 0)
+			{
+				arr[i][j] = 0;
+			}
+		}
+	}
+	
+	for (int i = 0; i < 10; i++)
+	{
+		int u;
+		u = 0;
+		for (int j = 0; j < 12; j++)
+		{
+			if (arr[i][j] != 0)
+			{
+				u += 1;				
+			}
+
+		}
+		cout << u << " ";
+		if (u % 2 == 0)
+		{
+			Max[i] = (arr[i][u/2 - 1] + (arr[i][u/2]))/2;
+		}
+		else
+		{
+			Max[i] = arr[i][(u-1)/2];
+		}
+	}
+	cout << endl;
+	for (int i = 0; i < 12; i++) 
+	{
+		int temp;
+		for (int j = 0; j < 11; j++)
+		{
+			if (Max[j] < Max[j + 1])
+			{
+				temp = Max[j];
+				Max[j] = Max[j + 1];
+				Max[j + 1] = temp;
+				temp = 0;
+			}
+		}
+	}
+	cout << endl;
+
+	cout << Max[0] << endl;
+}
 }
