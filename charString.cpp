@@ -26,7 +26,10 @@ namespace ext
 	void characterAt(charString* str, int num)
 	{
 		int temp;
-
+		while (temp != num)
+		{
+			
+		}
 	}
 	void print(charString* str)
 	{
