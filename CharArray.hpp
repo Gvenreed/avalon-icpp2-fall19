@@ -8,4 +8,5 @@ namespace ext
 	void concatenate(charArray & first, charArray second);
 	void append(charArray& first, char second);
 	void substring(charArray& first, int p, int l);
+	void replaceString(charArray& first, charArray& second, charArray& third);
 }
