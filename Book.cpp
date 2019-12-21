@@ -242,13 +242,14 @@ namespace ext
 
 		cout << "Отсортированный список: " << endl;
 
-		ifstream Library_1("books.bin", istream::binary | istream::in);
+		ifstream Library_5("books.bin", istream::binary | istream::in);
 		Book book3;
 		for (int j = 0; j < size / sizeof(Book); ++j)
 		{
-			Library_1.read(reinterpret_cast<char*>(&book3), sizeof(Book));
+			Library_5.read(reinterpret_cast<char*>(&book3), sizeof(Book));
 			cout << book3 << endl;
 		}
+		Library_5.close();
 	}
 
 	//статистика
