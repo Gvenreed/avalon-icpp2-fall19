@@ -13,60 +13,76 @@ struct Triangle
 	double thickness;
 };
 
-int findIndex(int data[], int left, int right, int value)
+ostream& operator << (ostream& out, Triangle x)
 {
-	int middle = (left + right) / 2;
-	if (data[middle] == value)
-	{
-		return middle;
-	}
-	if (data[middle] > value)
-	{
-		return findIndex(data, left, middle - 1, value);
-	}
-	else
-	{
-		return findIndex(data, middle + 1, right, value);
-	}
+	out << x.a << " " << x.b << " " << x.c << " " << x.thickness;
+	return out;
 }
 
-int findIndex(int data[], int size, int value)
+istream& operator >> (istream& in, Triangle& x)
 {
-	return findIndex(data, 0, size - 1, value);
+	in >> x.a >> x.b >> x.c >> x.thickness;
+	return in;
 }
 
+
+int perimeter(Triangle x)
+{
+	return x.a + x.b + x.c;
+}
 
 int main()
 {
-	Triangle data[100];
-	ifstream fin("triangle.txt");
+	setlocale(LC_ALL, "");
+	bool res = false;
+	int size, l, r;
+	int request;
+	Triangle data;
+	data.a = 1;
+	data.c = 1;
+	data.b = 1;
+	data.thickness = 0;
+	ifstream FileOfTriangle("triangle.bin", istream::in | istream::binary);
 
-	int i = 0;
-	while (!fin.eof())
+	if (!FileOfTriangle.is_open())
 	{
-		string temp;
-		getline(fin, temp);
-
-		istringstream istream(temp);
-		istream >> data[i].a >> data[i].b >> data[i].c >> data[i].thickness;
-		++i;
+		cout << "File cannot be open" << endl;
+		return 1;
 	}
 
-	for (int i = 0; i < 100; ++i)
+	cout << "Введите периметр" << endl;
+	cin >> request;
+	FileOfTriangle.seekg(0, ios_base::end);
+	size = FileOfTriangle.tellg();
+	l= 0; 
+	r= size - 1;
+	while (l != r-1)
 	{
-		string temp;
-		getline(fin, temp);
-
-		istringstream istream(temp);
-		istream >> data[i].a >> data[i].b >> data[i].c >> data[i].thickness;
+		FileOfTriangle.seekg(sizeof(Triangle)*((l + r) / 2));
+		FileOfTriangle >> data;
+		
+		if (request == perimeter(data))
+		{
+			cout << data;
+			res = true;
+			break;
+		}
+		else
+		{
+			if (request > perimeter(data))
+			{
+				l = (l + r) / 2;
+			}
+			else
+			{
+				r = (l + r) / 2;
+			}
+		}
+		
 	}
-
-	//Point point;
-	istringstream istream("5 10");
-	ostringstream ostream;
-
-	//istream >> point.x >> point.y;
-	//ostream << point.x << " " << point.y;
-
-	cout << ostream.str() << endl;
+	if (!res)
+	{
+		cout << "Треугольника с таким периметром нет" << endl;
+	}
+	FileOfTriangle.close();
 }
