@@ -65,14 +65,14 @@ namespace ext
 		}
 		ofstream Library("books.bin", istream::ate | istream::binary);
 		if (!Library.is_open())
-			{
-				cout << "File cannot be open" << endl;
-				temp = false;
-			}
+		{
+			cout << "File cannot be open" << endl;
+			temp = false;
+		}
 		if (temp)
-			{
+		{
 			Library << Nbook;
-			}
+		}
 	}
 
 	//изменение по id
@@ -93,7 +93,7 @@ namespace ext
 		while (l != r - 1)
 		{
 			Library.seekg(sizeof(Book) * ((l + r) / 2));
-			Library.read(reinterpret_cast<char*>(&temp),sizeof(Book));
+			Library.read(reinterpret_cast<char*>(&temp), sizeof(Book));
 			if (count == temp.Id)
 			{
 				res = true;
@@ -136,7 +136,7 @@ namespace ext
 		cout << "Введите новое количество книг " << endl;
 		cin >> data.Quantity;
 		Library_nw.write(reinterpret_cast<char*>(&data), sizeof(Book));
-		
+
 		Library_nw.close();
 
 		if (!res)
@@ -171,7 +171,7 @@ namespace ext
 			cout << ptr->Id << " " << ptr->Title << " " << ptr->Author << " " << ptr->Price << " " << ptr->Quantity << endl;
 		}
 
-	}	
+	}
 
 	//сортировка по автору и названию
 	void Sort(Book*& book)
@@ -180,61 +180,65 @@ namespace ext
 		Library_11.seekg(0, ios_base::end);
 		int size = 0;
 		size = Library_11.tellg();
+		ofstream Library_temp("temp_books.bin", istream::binary | istream::in);
+		Book book0;
+		for (int i = 0; i < size / sizeof(Book); ++i)
+		{
+			Library_11.read(reinterpret_cast<char*>(&book0), sizeof(Book));
+			Library_temp.write(reinterpret_cast<char*>(&book0), sizeof(Book));
+		}
 		ofstream Library_22("books.bin", istream::out | istream::binary | istream::ate);
-		Library_11.seekg(0);
-		Library_22.seekp(0);
 		Library_11.close();
 		Library_22.close();
+		Library_temp.close();
 
+		//сортировка по автору
+		ifstream Library_1("temp_books.bin", istream::binary | istream::in);
+		ofstream Library_2("temp_books.bin", istream::out | istream::binary);
 		for (int i = 0; i < size / sizeof(Book); ++i)
 		{
 			Book book1;
 			Book book2;
 			for (int j = 0; j < size / sizeof(Book); ++j)
 			{
-				ifstream Library_1("books.bin", istream::binary | istream::in);
-				Library_1.seekg(j * sizeof(Book));
+				
 				Library_1.read(reinterpret_cast<char*>(&book1), sizeof(Book));
-				Library_1.seekg((j + 1) * sizeof(Book));
 				Library_1.read(reinterpret_cast<char*>(&book2), sizeof(Book));
 				if (book1.Author > book2.Author)
 				{
-					ofstream Library_2("books.bin", istream::out | istream::binary | istream::ate);
+
 					swap(book1, book2);
-					Library_2.seekp(j * sizeof(Book));
 					Library_2.write(reinterpret_cast<char*>(&book1), sizeof(Book));
-					Library_2.seekp((j + 1) * sizeof(Book));
 					Library_2.write(reinterpret_cast<char*>(&book2), sizeof(Book));
-					Library_1.close();
-					Library_2.close();
+					
 				}
 			}
 		}
+		Library_1.close();
+		Library_2.close();
 
+		//сортировка по названию
+		ifstream Library_3("temp_books.bin", istream::binary | istream::ate);
+		ofstream Library_4("temp_books.bin", istream::out | istream::binary);
 		for (int i = 0; i < size / sizeof(Book); ++i)
 		{
 			Book book1;
 			Book book2;
+			
 			for (int j = 0; j < size / sizeof(Book); ++j)
 			{
-				ifstream Library_1("books.bin", istream::binary | istream::in);
-				Library_1.seekg(j * sizeof(Book));
-				Library_1.read(reinterpret_cast<char*>(&book1), sizeof(Book));
-				Library_1.seekg((j + 1) * sizeof(Book));
-				Library_1.read(reinterpret_cast<char*>(&book2), sizeof(Book));
+				Library_3.read(reinterpret_cast<char*>(&book1), sizeof(Book));
+				Library_3.read(reinterpret_cast<char*>(&book2), sizeof(Book));
 				if ((book1.Title > book2.Title) && (book1.Author == book2.Author))
-				{
-					ofstream Library_2("books.bin", istream::out | istream::binary | istream::ate);
+				{			
 					swap(book1, book2);
-					Library_2.seekp(j * sizeof(Book));
-					Library_2.write(reinterpret_cast<char*>(&book1), sizeof(Book));
-					Library_2.seekp((j + 1) * sizeof(Book));
-					Library_2.write(reinterpret_cast<char*>(&book2), sizeof(Book));
-					Library_1.close();
-					Library_2.close();
+					Library_4.write(reinterpret_cast<char*>(&book1), sizeof(Book));
+					Library_4.write(reinterpret_cast<char*>(&book2), sizeof(Book));
 				}
 			}
 		}
+		Library_3.close();
+		Library_4.close();
 
 		cout << "Отсортированный список: " << endl;
 
