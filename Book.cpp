@@ -242,8 +242,7 @@ namespace ext
 
 		cout << "Отсортированный список: " << endl;
 
-		ifstream Library_5("books.bin", istream::binary | istream::in);
-		Book book3;
+		ifstream Library_5("temp_books.bin", istream::binary | istream::in);
 		for (int j = 0; j < size / sizeof(Book); ++j)
 		{
 			Library_5.read(reinterpret_cast<char*>(&book3), sizeof(Book));
